@@ -18,15 +18,15 @@ window.onunhandledrejection = function (event) {
 // 🔑 ADD YOUR API KEYS HERE — Paste your keys in the quotes below (or use localStorage)
 // =============================================================================
 // If you use Live Server only (no "node server.js"), paste your keys below (or leave as set from .env):
-var GEMINI_KEY_FALLBACK = 'AIzaSyBoiXU72Wa-bpsNxzNnLcH8-8z2bzkyJIQ';
-var GOOGLE_CLIENT_ID_FALLBACK = '217858999379-7627hr0j8093ejm3mh92l3a9kn43d9j2.apps.googleusercontent.com';
-var GITHUB_CLIENT_ID_FALLBACK = 'Ov23liTHHsOtBOcPThZD';
+var GEMINI_KEY_FALLBACK = 
+var GOOGLE_CLIENT_ID_FALLBACK = 
+var GITHUB_CLIENT_ID_FALLBACK = 
 // Gemini: aistudio.google.com/app/apikey  |  Remove.bg: remove.bg/api  |  OpenAI: platform.openai.com/api-keys
 // =============================================================================
 
 AILibrary.config = {
   geminiKey: localStorage.getItem('ai_library_gemini_key') || (typeof GEMINI_KEY_FALLBACK !== 'undefined' ? GEMINI_KEY_FALLBACK : ''),
-  removeBgKey: localStorage.getItem('ai_library_removebg_key') || 'oXf5LYq7VRpBypgEqzX7ibst',
+  removeBgKey: localStorage.getItem('ai_library_removebg_key') || 
   openaiKey: localStorage.getItem('ai_library_openai_key') || '',
   useGemini: true,
   serverAvailable: true,
