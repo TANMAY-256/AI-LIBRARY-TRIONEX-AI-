@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<!-- API keys are set in Settings (dashboard) or localStorage — never stored in source -->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trionex AI — Login & Sign Up</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Load script.js first so config is ready, then set FB init, then load SDKs -->
+  <script src="script.js"></script>
+
+  <script src="https://accounts.google.com/gsi/client"></script>
+
+</head>
+
+<body class="auth-page">
+  <div class="theme-toggle-wrap">
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme"
+      title="Toggle theme">🌙</button>
+  </div>
+  <div class="auth-bg"></div>
+
+
+
+  <main class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">
+          <span class="logo-icon">◇</span>
+          <h1>Trionex AI</h1>
+        </div>
+        <p class="auth-tagline">Experience premium AI tools without paying a single rupee.</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" data-tab="login">Log In</button>
+        <button type="button" class="auth-tab" data-tab="signup">Sign Up</button>
+      </div>
+
+      <form id="login-form" class="auth-form active">
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <div class="form-footer">
+          <a href="#" id="forgot-password-link" class="auth-link">Forgot Password?</a>
+        </div>
+        <p id="login-error" class="form-error" aria-live="polite"></p>
+        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+        <div class="auth-divider"><span>or continue with</span></div>
+        <div class="social-buttons">
+          <button type="button" class="btn-social btn-google" id="login-google" aria-label="Log in with Google">
+            <svg class="social-icon" viewBox="0 0 24 24">
+              <path fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+              <path fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+            </svg>
+            Google
+          </button>
+          <button type="button" class="btn-social btn-github" id="login-github" aria-label="Log in with GitHub">
+            <svg class="social-icon" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+            </svg>
+            GitHub
+          </button>
+        </div>
+      </form>
+
+      <!-- Forgot Password Form -->
+      <form id="forgot-form" class="auth-form">
+        <div id="forgot-step-1">
+          <div class="form-group">
+            <p class="form-info">Enter your registered email to receive an OTP.</p>
+            <label for="forgot-email">Email</label>
+            <input type="email" id="forgot-email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+          <button type="submit" id="btn-request-otp" class="btn btn-primary btn-block">Send OTP</button>
+        </div>
+        <div id="forgot-step-2" style="display: none;">
+          <div class="form-group">
+            <p class="form-info">Enter the 6-digit OTP sent to your email and your new password.</p>
+            <label for="forgot-otp">OTP Code</label>
+            <input type="text" id="forgot-otp" placeholder="123456" maxlength="6" pattern="[0-9]{6}">
+          </div>
+          <div class="form-group">
+            <label for="forgot-new-password">New Password</label>
+            <input type="password" id="forgot-new-password" placeholder="Min. 6 characters" minlength="6">
+          </div>
+          <button type="button" id="btn-reset-password" class="btn btn-primary btn-block">Reset Password</button>
+        </div>
+        <p id="forgot-error" class="form-error" aria-live="polite"></p>
+        <p id="forgot-success" class="form-success" aria-live="polite"></p>
+        <div class="form-footer">
+          <a href="#" id="back-to-login" class="auth-link">Back to Log In</a>
+        </div>
+      </form>
+
+      <form id="signup-form" class="auth-form">
+        <div class="form-group">
+          <label for="signup-name">Full Name</label>
+          <input type="text" id="signup-name" placeholder="Your name" required autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="signup-email">Email</label>
+          <input type="email" id="signup-email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" placeholder="Min. 6 characters" required minlength="6"
+            autocomplete="new-password">
+        </div>
+        <p id="signup-error" class="form-error" aria-live="polite"></p>
+        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+        <div class="auth-divider"><span>or continue with</span></div>
+        <div class="social-buttons">
+          <button type="button" class="btn-social btn-google" id="signup-google" aria-label="Sign up with Google">
+            <svg class="social-icon" viewBox="0 0 24 24">
+              <path fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+              <path fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+            </svg>
+            Google
+          </button>
+
+          <button type="button" class="btn-social btn-github" id="signup-github" aria-label="Sign up with GitHub">
+            <svg class="social-icon" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+            </svg>
+            GitHub
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var loginForm = document.getElementById('login-form');
+      var signupForm = document.getElementById('signup-form');
+      var tabs = document.querySelectorAll('.auth-tab');
+      var loginError = document.getElementById('login-error');
+      var signupError = document.getElementById('signup-error');
+      var forgotForm = document.getElementById('forgot-form');
+      var forgotError = document.getElementById('forgot-error');
+      var forgotSuccess = document.getElementById('forgot-success');
+      var forgotLink = document.getElementById('forgot-password-link');
+      var backLogin = document.getElementById('back-to-login');
+      var forgotStep1 = document.getElementById('forgot-step-1');
+      var forgotStep2 = document.getElementById('forgot-step-2');
+
+      function goDashboard() { window.location.href = 'dashboard.html'; }
+      function errorElFor(btn) { return btn.id.indexOf('signup') !== -1 ? signupError : loginError; }
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var target = this.getAttribute('data-tab');
+          tabs.forEach(function (t) { t.classList.remove('active'); });
+          this.classList.add('active');
+          loginError.textContent = '';
+          signupError.textContent = '';
+          forgotError.textContent = '';
+          forgotSuccess.textContent = '';
+          forgotForm.classList.remove('active');
+          if (target === 'login') {
+            loginForm.classList.add('active');
+            signupForm.classList.remove('active');
+          } else {
+            signupForm.classList.add('active');
+            loginForm.classList.remove('active');
+          }
+        });
+      });
+
+      loginForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        loginError.textContent = '';
+        var email = document.getElementById('login-email').value.trim();
+        var password = document.getElementById('login-password').value;
+        try {
+          var result = await AILibrary.auth.login(email, password);
+          console.log('Login result:', result); // Added log
+          if (result.success) {
+            console.log('Login successful, redirecting to dashboard...'); // Added log
+            goDashboard();
+          }
+          else loginError.textContent = result.message || 'Invalid email or password.';
+        } catch (err) {
+          console.error(err);
+          loginError.textContent = 'Login error. Please try again.';
+        }
+      });
+
+      signupForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        signupError.textContent = '';
+        var name = document.getElementById('signup-name').value.trim();
+        var email = document.getElementById('signup-email').value.trim();
+        var password = document.getElementById('signup-password').value;
+        try {
+          var result = await AILibrary.auth.signUp(name, email, password);
+          if (result.success) goDashboard();
+          else signupError.textContent = result.message || 'Could not create account.';
+        } catch (err) {
+          console.error(err);
+          signupError.textContent = 'Signup error. Please try again.';
+        }
+      });
+
+
+      forgotLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        loginForm.classList.remove('active');
+        signupForm.classList.remove('active');
+        forgotForm.classList.add('active');
+        forgotError.textContent = '';
+        forgotSuccess.textContent = '';
+        forgotStep1.style.display = 'block';
+        forgotStep2.style.display = 'none';
+      });
+
+      backLogin.addEventListener('click', function (e) {
+        e.preventDefault();
+        forgotForm.classList.remove('active');
+        loginForm.classList.add('active');
+        tabs.forEach(t => t.classList.remove('active'));
+        tabs[0].classList.add('active');
+      });
+
+      forgotForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        forgotError.textContent = '';
+        forgotSuccess.textContent = '';
+        var email = document.getElementById('forgot-email').value.trim();
+        var btn = document.getElementById('btn-request-otp');
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+        try {
+          var result = await AILibrary.auth.requestOtp(email);
+          if (result.success) {
+            forgotStep1.style.display = 'none';
+            forgotStep2.style.display = 'block';
+            forgotSuccess.textContent = 'OTP sent! Please check your email.';
+          } else {
+            forgotError.textContent = result.message || 'Error sending OTP.';
+          }
+        } catch (err) {
+          forgotError.textContent = 'Connection error.';
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Send OTP';
+        }
+      });
+
+      document.getElementById('btn-reset-password').addEventListener('click', async function () {
+        forgotError.textContent = '';
+        forgotSuccess.textContent = '';
+        var email = document.getElementById('forgot-email').value.trim();
+        var otp = document.getElementById('forgot-otp').value.trim();
+        var newPass = document.getElementById('forgot-new-password').value;
+        var btn = this;
+        btn.disabled = true;
+        btn.textContent = 'Resetting...';
+        try {
+          var result = await AILibrary.auth.verifyOtpAndReset(email, otp, newPass);
+          if (result.success) {
+            forgotSuccess.textContent = result.message;
+            setTimeout(() => {
+              forgotForm.classList.remove('active');
+              loginForm.classList.add('active');
+              tabs[0].click();
+            }, 2000);
+          } else {
+            forgotError.textContent = result.message || 'Reset failed.';
+          }
+        } catch (err) {
+          forgotError.textContent = 'Connection error.';
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Reset Password';
+        }
+      });
+
+      [['login-google', 'signup-google'], ['login-github', 'signup-github']].forEach(function (ids) {
+        ids.forEach(function (id) {
+          var btn = document.getElementById(id);
+          if (!btn) return;
+          var provider = id.indexOf('google') !== -1 ? 'Google' : id.indexOf('facebook') !== -1 ? 'Facebook' : 'GitHub';
+          btn.addEventListener('click', function () {
+            loginError.textContent = '';
+            signupError.textContent = '';
+            if (provider === 'Google') AILibrary.socialAuth.loginGoogle(errorElFor(btn), goDashboard);
+            else AILibrary.socialAuth.loginGitHub(errorElFor(btn), goDashboard);
+          });
+        });
+      });
+
+
+    })();
+  </script>
+</body>
+
+</html>

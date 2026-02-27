@@ -1,0 +1,16 @@
+# API keys and secrets — never commit these
+.env
+.env.local
+.env.*.local
+config.keys.js
+config.local.js
+*.pem
+
+# Dependencies and build
+node_modules/
+
+# OS and editor
+.DS_Store
+Thumbs.db
+*.log
+.cursor/

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signing in… — Trionex AI</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .callback-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: var(--theme-bg); }
+    .callback-card { max-width: 400px; text-align: center; padding: 2rem; }
+    .callback-card h2 { margin: 0 0 0.5rem; font-size: 1.25rem; color: var(--theme-text-primary); }
+    .callback-card p { margin: 0 0 1rem; color: var(--theme-text-muted); font-size: 0.9rem; }
+    .callback-card a { color: var(--theme-text-primary); text-decoration: underline; }
+  </style>
+</head>
+<body class="callback-page">
+  <div class="callback-card">
+    <p id="callback-status">Completing sign-in…</p>
+    <p id="callback-error" style="display:none; color: var(--theme-error);"></p>
+    <a href="index.html" id="callback-back" style="display:none;">← Back to login</a>
+  </div>
+  <script src="script.js"></script>
+  <script>
+    (function() {
+      var status = document.getElementById('callback-status');
+      var errEl = document.getElementById('callback-error');
+      var backLink = document.getElementById('callback-back');
+
+      function showError(msg) {
+        status.style.display = 'none';
+        errEl.textContent = msg || 'Sign-in failed.';
+        errEl.style.display = 'block';
+        backLink.style.display = 'inline';
+      }
+
+      function parseHash() {
+        var hash = (location.hash || '').replace(/^#/, '');
+        if (!hash) return {};
+        var out = {};
+        hash.split('&').forEach(function(pair) {
+          var i = pair.indexOf('=');
+          if (i !== -1) out[decodeURIComponent(pair.slice(0, i))] = decodeURIComponent(pair.slice(i + 1).replace(/\+/g, ' '));
+        });
+        return out;
+      }
+
+      function parseQuery() {
+        var q = (location.search || '').replace(/^\?/, '');
+        if (!q) return {};
+        var out = {};
+        q.split('&').forEach(function(pair) {
+          var i = pair.indexOf('=');
+          if (i !== -1) out[decodeURIComponent(pair.slice(0, i))] = decodeURIComponent(pair.slice(i + 1).replace(/\+/g, ' '));
+        });
+        return out;
+      }
+
+      var hash = parseHash();
+      var query = parseQuery();
+
+      if (hash.email) {
+        var name = hash.name || hash.email.split('@')[0];
+        var result = AILibrary.auth.socialLoginOrSignUp(hash.email, name);
+        if (result.success) {
+          location.replace('dashboard.html');
+          return;
+        }
+        showError(result.message || 'Could not sign in.');
+        return;
+      }
+
+      if (hash.error) {
+        showError(hash.error_description || hash.error || 'Sign-in failed.');
+        backLink.style.display = 'inline';
+        return;
+      }
+
+      if (hash.access_token) {
+        fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+          headers: { Authorization: 'Bearer ' + hash.access_token }
+        }).then(function(r) { return r.json(); }).then(function(profile) {
+          if (profile && profile.email) {
+            var email = profile.email;
+            var name = (profile.name || profile.given_name || '').trim() || email.split('@')[0];
+            var result = AILibrary.auth.socialLoginOrSignUp(email, name);
+            if (result.success) {
+              location.replace('dashboard.html');
+              return;
+            }
+          }
+          showError('Could not get profile from Google.');
+        }).catch(function() {
+          showError('Could not complete Google sign-in.');
+        });
+        return;
+      }
+
+      if (query.code) {
+        var proxyUrl = (AILibrary.config && AILibrary.config.githubOAuthProxyUrl) ? AILibrary.config.githubOAuthProxyUrl : '';
+        var redirectUri = (AILibrary.config && AILibrary.config.githubRedirectUri) ? AILibrary.config.githubRedirectUri : (location.origin + '/callback.html');
+        if (proxyUrl) {
+          var go = proxyUrl + (proxyUrl.indexOf('?') !== -1 ? '&' : '?') + 'code=' + encodeURIComponent(query.code) + '&redirect_uri=' + encodeURIComponent(redirectUri);
+          location.replace(go);
+          return;
+        }
+        showError('GitHub sign-in requires a server to exchange the code. Set githubOAuthProxyUrl in script.js to your serverless function that exchanges the code and redirects back here with #email=...&name=...');
+        backLink.style.display = 'inline';
+        return;
+      }
+
+      if (query.error) {
+        showError(query.error_description || query.error || 'Authorization was denied or failed.');
+        return;
+      }
+
+      showError('No authorization data received.');
+      backLink.style.display = 'inline';
+    })();
+  </script>
+</body>
+</html>
